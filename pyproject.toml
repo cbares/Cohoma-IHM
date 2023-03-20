@@ -13,6 +13,7 @@ uvicorn = "^0.21.1"
 SQLAlchemy = "^2.0.7"
 aiofiles = "^23.1.0"
 xyzservices = "^2023.2.0"
+folium = "^0.14.0"
 
 
 [build-system]
