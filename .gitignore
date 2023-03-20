@@ -1,0 +1,5 @@
+sql_app.db
+*.ipynb
+.ipynb_checkpoints/
+__pycache__/
+.idea/

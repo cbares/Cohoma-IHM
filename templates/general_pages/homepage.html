@@ -1,0 +1,117 @@
+{% extends "shared/base.html" %}
+
+
+{% block title %}
+    <title>Theseus IHM</title>
+    {{ header|safe }}
+{% endblock %}
+
+{% block content %}
+    <h2>Global view</h2>
+    <div id="map" style="top:10em">{{ map|safe }}</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        {{ script|safe }}
+        var marker = [];
+        var map = {{ mapname|safe }};
+
+        function add_marker_to_map(marker_info){
+            const fontAwesomeIcon = L.divIcon({
+                html: '<i class="fa fa-map-marker fa-4x"></i>',
+                iconSize: [50, 20],
+                iconAnchor: [25, 20],
+                className: 'myDivIcon'
+            });
+            let location = L.latLng(marker_info.lat, marker_info.lng);
+            let option = {};
+            if(marker_info.hasOwnProperty("draggable")) {
+                option.draggable = marker_info.draggable;
+            }  else {
+                option.draggable = true;
+            }
+            option.title = marker_info.name;
+            //option.icon = fontAwesomeIcon;
+            var m = new L.marker(location, option);
+            m.name = marker_info.name;
+            m.lat = marker_info.lat;
+            m.lng = marker_info.lng;
+            m.addTo({{ mapname|safe }});
+            m.bindPopup('<p> ' + m.name + '<br/>' + L.Util.formatNum(location.lat) + ' º <br />'
+                + L.Util.formatNum(location.lng) + ' º </p>').openPopup();
+            m.on('dblclick', function (e){
+               var mark = m;
+               $.ajax({
+                   url: '/api/waypoint/delete/' + mark.id,
+                   method: 'DELETE',
+                   contentType: "application/json; charset=utf-8"
+               })
+                   .done(r => map.removeLayer(mark))
+                   .fail(r => console.log(r.responseJSON.detail))
+               ;
+               return false;
+            });
+            m.on('dragend', function (e){
+                let mark = e.target;
+                let location = mark.getLatLng();
+                let item = {lat:location.lat, lng:location.lng};
+                mark.setLatLng(new L.LatLng(location.lat, location.lng),{draggable:'true'});
+                $.ajax({
+                    url: '/api/waypoint/update/' + mark.id,
+                    method: 'PATCH',
+                    data: JSON.stringify(item),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(r => console.log(r.responseJSON.detail));
+                return false;
+            });
+            return m;
+        };
+
+        function add_marker_to_base(m){
+            let location = m.getLatLng();
+            let item = { "lat": location.lat, "lng": location.lng, "waypoint": marker.length};
+            $.post({
+                url: '/api/waypoint/',
+                data: JSON.stringify(item),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8"
+            }).done(function (json){
+                    m.id = json.id;
+                    console.log("id=" + m.id + " " + json.toString());
+                });
+        };
+
+        map.on('click', function(e) {
+            var popLocation= e.latlng;
+            console.log(popLocation);
+            m = add_marker_to_map({
+                lat: popLocation.lat,
+                lng: popLocation.lng,
+                name: "waypoint " + (marker.length + 1)
+            });
+            add_marker_to_base(m);
+        });
+
+        $(function() {
+            $.get({
+                url: '/api/waypoint/all',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8"
+            }).done(function(json){
+                      json.forEach(m => {
+                          m.lat = m.latitude;
+                          m.lng = m.longitude;
+                          m.name = "waypoint " + m.waypoint;
+                          mark = add_marker_to_map(m);
+                          mark.id = m.id;
+                      });
+                  });
+        });
+
+    </script>
+
+{% endblock %}
