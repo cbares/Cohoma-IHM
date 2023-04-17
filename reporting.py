@@ -13,13 +13,17 @@ auth = "5fyg-mqqs-rxqu-sfjm-pl2d"
 ODAC = "https://6bus5bof45.execute-api.eu-west-3.amazonaws.com/dev/trackers"
 ODAC = "http://127.0.0.1:8000/dev/trackers"
 
+DELTA = 1 # seconde
+
 SERVER= "127.0.0.1"
 PORT = "8000"
 URI = "api/waypoint/reporting"
 header = {'accept': 'application/json'}
+URL_IHM = f"http://{SERVER}:{PORT}/{URI}"
+
 
 def update_data_ODAC():
-    result = requests.get(f"http://{SERVER}:{PORT}/{URI}", header)
+    result = requests.get(URL_IHM, header)
     marker = result.json()
 
     for m in marker:
@@ -30,14 +34,11 @@ def update_data_ODAC():
             print(r.status_code, m)
 
 
-def do_something(scheduler):
-    # schedule the next call first
-    scheduler.enter(1, 1, do_something, (scheduler,))
-    # then do your stuff:
-    print(".",end='')
+def schedule_udpate_data(scheduler):
+    scheduler.enter(delay=DELTA, priority=1, action=schedule_udpate_data, argument=(scheduler,))
     update_data_ODAC()
 
 
-my_scheduler = sched.scheduler(time.time, time.sleep)
-my_scheduler.enter(2, 1, do_something, (my_scheduler,))
-my_scheduler.run()
+cohoma_scheduler = sched.scheduler(time.time, time.sleep)
+cohoma_scheduler.enter(2, 1, schedule_udpate_data, (cohoma_scheduler,))
+cohoma_scheduler.run()
