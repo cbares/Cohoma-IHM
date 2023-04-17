@@ -33,14 +33,14 @@ class ReportMarker(BaseModel):
     team: str = "Theseus"
     auth: str = "key"
     source: str
-    location: Geolocation
+    geolocation: Geolocation
     altitude: float = 0
     timestamp: int
 
     def __init__(self, m:Marker=None, **kwargs):
         if m:
-            location = Geolocation(latitude=m.latitude, longitude=m.longitude)
-            super().__init__(location=location, source=m.name, timestamp = int(m.timestamp.timestamp() * 1000))
+            geolocation = Geolocation(latitude=m.latitude, longitude=m.longitude)
+            super().__init__(geolocation=geolocation, source=m.name, timestamp = int(m.timestamp.timestamp() * 1000))
         else:
             super().__init__(**kwargs)
 
