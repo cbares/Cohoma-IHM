@@ -4,10 +4,10 @@ from fastapi import APIRouter
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from schemas.markers import MarkerCreate, ShowMarker, MarkerUpdate
+from schemas.markers import MarkerCreate, ShowMarker, ReportMarker, MarkerUpdate
 from db.session import get_db
 from db.repository.markers import create_new_marker, retrieve_marker, list_markers, delete_marker_by_id, \
-    NotFoundException, LockedException, update_marker_by_id
+    NotFoundException, LockedException, update_marker_by_id, list_report_markers
 
 router = APIRouter()
 
@@ -29,6 +29,12 @@ def read_marker(id:int, db:Session = Depends(get_db)):
 @router.get("/all",response_model=List[ShowMarker], response_model_by_alias=False)
 def read_markers(db:Session = Depends(get_db)):
     markers = list_markers(db=db)
+    return markers
+
+
+@router.get("/reporting",response_model=List[ReportMarker], response_model_by_alias=False)
+def read_markers(db:Session = Depends(get_db)):
+    markers = list_report_markers(db=db)
     return markers
 
 

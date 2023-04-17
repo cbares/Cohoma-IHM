@@ -10,7 +10,7 @@ general_pages_router = APIRouter()
 
 FRILEUSE = ((48.86102, 1.89201),  15)
 ENSEA = ((49.039, 2.072), 18)
-ORIGIN = ENSEA
+ORIGIN = FRILEUSE
 
 
 @general_pages_router.get("/")

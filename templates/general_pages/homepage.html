@@ -7,9 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Global view</h2>
     <div id="map" style="top:10em">{{ map|safe }}</div>
-
 {% endblock %}
 
 {% block scripts %}
@@ -18,13 +16,18 @@
         var marker = [];
         var map = {{ mapname|safe }};
 
-        function add_marker_to_map(marker_info){
-            const fontAwesomeIcon = L.divIcon({
-                html: '<i class="fa fa-map-marker fa-4x"></i>',
-                iconSize: [50, 20],
-                iconAnchor: [25, 20],
-                className: 'myDivIcon'
+        const RBBIcon = L.AwesomeMarkers.icon({
+                icon: 'truck-monster',
+                prefix: "fa",
+                markerColor: 'green'
             });
+        const DAOIcon = L.AwesomeMarkers.icon({
+                icon: 'mosquito',
+                prefix: "fa",
+                markerColor: 'green'
+            });
+
+        function add_marker_to_map(marker_info){
             let location = L.latLng(marker_info.lat, marker_info.lng);
             let option = {};
             if(marker_info.hasOwnProperty("draggable")) {
@@ -33,14 +36,15 @@
                 option.draggable = true;
             }
             option.title = marker_info.name;
-            //option.icon = fontAwesomeIcon;
+            option.icon = DAOIcon;
             var m = new L.marker(location, option);
             m.name = marker_info.name;
             m.lat = marker_info.lat;
             m.lng = marker_info.lng;
             m.addTo({{ mapname|safe }});
             m.bindPopup('<p> ' + m.name + '<br/>' + L.Util.formatNum(location.lat) + ' º <br />'
-                + L.Util.formatNum(location.lng) + ' º </p>').openPopup();
+                + L.Util.formatNum(location.lng) + ' º <br />'
+                + 'altitude: ' + '0' +' m </p>').openPopup();
             m.on('dblclick', function (e){
                var mark = m;
                $.ajax({
@@ -73,7 +77,7 @@
 
         function add_marker_to_base(m){
             let location = m.getLatLng();
-            let item = { "lat": location.lat, "lng": location.lng, "waypoint": marker.length};
+            let item = { "lat": location.lat, "lng": location.lng, "waypoint": m.name};
             $.post({
                 url: '/api/waypoint/',
                 data: JSON.stringify(item),
@@ -88,11 +92,15 @@
         map.on('click', function(e) {
             var popLocation= e.latlng;
             console.log(popLocation);
+            selected = $('input[name="SatelliteType"]:checked');
+            model = selected.val();
+            color = selected.data("color");
             m = add_marker_to_map({
                 lat: popLocation.lat,
                 lng: popLocation.lng,
-                name: "waypoint " + (marker.length + 1)
-            });
+                name: model + (marker.length + 1),
+                color: color
+            })
             add_marker_to_base(m);
         });
 
@@ -105,7 +113,7 @@
                       json.forEach(m => {
                           m.lat = m.latitude;
                           m.lng = m.longitude;
-                          m.name = "waypoint " + m.waypoint;
+                          m.name = m.waypoint;
                           mark = add_marker_to_map(m);
                           mark.id = m.id;
                       });

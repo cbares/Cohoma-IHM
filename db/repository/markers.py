@@ -1,8 +1,9 @@
 import datetime
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from schemas.markers import MarkerCreate, MarkerUpdate
+from schemas.markers import MarkerCreate, MarkerUpdate, ReportMarker, Geolocation
 from db.models.markers import Marker
 
 
@@ -33,6 +34,15 @@ def retrieve_marker(id: int, db: Session):
 def list_markers(db:Session):
     items = db.query(Marker).all()
     return items
+
+
+def list_report_markers(db:Session):
+    items = db.query(Marker.id, Marker.name, Marker.latitude, Marker.longitude, Marker.timestamp, func.max(Marker.timestamp)).group_by(Marker.name)
+    reports = []
+    for i in items:
+        rm = ReportMarker(i)
+        reports.append(rm)
+    return reports
 
 
 def delete_marker_by_id(id: int, db: Session):

@@ -54,14 +54,14 @@ def get_map_layers(start_coords, zoom):
         crossOrigin=True,
     ).add_to(folium_map)
 
-    fmtr = "function(num) {return L.Util.formatNum(num, 5) + ' º ';};"
+    fmtr = "function(num) {return L.Util.formatNum(num, 7) + ' º ';};"
     MousePosition(position='topright', separator=' | Lat: ', prefix="Lng:",
                   lat_formatter=fmtr, lng_formatter=fmtr).add_to(folium_map)
 
     folium.Marker(
         location=start_coords,
         popup="Papa Delta",
-        icon=folium.Icon(color="green"),
+        icon=folium.Icon(color="red",icon="truck-fast",prefix="fa"),
     ).add_to(folium_map)
     html = folium_map.get_root()
     html.render()
