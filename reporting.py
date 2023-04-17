@@ -40,5 +40,5 @@ def schedule_udpate_data(scheduler):
 
 
 cohoma_scheduler = sched.scheduler(time.time, time.sleep)
-cohoma_scheduler.enter(2, 1, schedule_udpate_data, (cohoma_scheduler,))
+schedule_udpate_data(cohoma_scheduler)
 cohoma_scheduler.run()

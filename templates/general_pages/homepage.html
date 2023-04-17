@@ -21,14 +21,15 @@
                 prefix: "fa",
                 markerColor: 'green'
             });
-        const DAOIcon = L.AwesomeMarkers.icon({
-                icon: 'mosquito',
-                prefix: "fa",
-                markerColor: 'green'
-            });
+
 
         function add_marker_to_map(marker_info){
             let location = L.latLng(marker_info.lat, marker_info.lng);
+            let DAOIcon = L.AwesomeMarkers.icon({
+                icon: marker_info.icon,
+                prefix: "fa",
+                markerColor: marker_info.color
+            });
             let option = {};
             if(marker_info.hasOwnProperty("draggable")) {
                 option.draggable = marker_info.draggable;
@@ -95,11 +96,13 @@
             selected = $('input[name="SatelliteType"]:checked');
             model = selected.val();
             color = selected.data("color");
+            icon = selected.data("icon");
             m = add_marker_to_map({
                 lat: popLocation.lat,
                 lng: popLocation.lng,
                 name: model + (marker.length + 1),
-                color: color
+                color: color,
+                icon: icon
             })
             add_marker_to_base(m);
         });
@@ -114,6 +117,8 @@
                           m.lat = m.latitude;
                           m.lng = m.longitude;
                           m.name = m.waypoint;
+                          m.color = "gray";
+                          m.icon = "crosshairs"
                           mark = add_marker_to_map(m);
                           mark.id = m.id;
                       });
