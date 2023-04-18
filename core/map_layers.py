@@ -1,7 +1,9 @@
-
 import folium
 from folium.plugins import MousePosition
 import xyzservices.providers as xyz
+
+from db.repository.baptemes import filter_baptemes, points_baptemes
+from db.session import get_db
 
 #tiles = xyz.GeoportailFrance.orthos
 tiles_plan = xyz.GeoportailFrance.plan
@@ -58,11 +60,22 @@ def get_map_layers(start_coords, zoom):
     MousePosition(position='topright', separator=' | Lat: ', prefix="Lng:",
                   lat_formatter=fmtr, lng_formatter=fmtr).add_to(folium_map)
 
-    folium.Marker(
-        location=start_coords,
-        popup="Papa Delta",
-        icon=folium.Icon(color="red",icon="truck-fast",prefix="fa"),
-    ).add_to(folium_map)
+    conf = {
+        "PI": "green",
+        "O1": "red",
+        "T1": "lightblue",
+        "T2": "blue",
+        "T3": "darkblue",
+        "T4": "cadetblue",
+    }
+    db = next(get_db())
+    for point in points_baptemes(db):
+        color = conf.get(point.name[0:2], "red")
+        folium.Marker(
+            location=(point.latitude, point.longitude),
+            popup=point.name,
+            icon=folium.Icon(color=color, icon="info", prefix="fa"),
+        ).add_to(folium_map)
     html = folium_map.get_root()
     html.render()
     return {"map": html.html.render(),

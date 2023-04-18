@@ -11,4 +11,3 @@ class Marker(Base):
     longitude = Column(Float)
     latitude = Column(Float)
     is_locked = Column(Boolean(), default=False)
-    terrain = relationship("Bapteme", back_populates="marker")

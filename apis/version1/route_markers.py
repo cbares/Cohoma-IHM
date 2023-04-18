@@ -12,7 +12,7 @@ from db.repository.markers import create_new_marker, retrieve_marker, list_marke
 router = APIRouter()
 
 
-@router.post("/", response_model = ShowMarker, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ShowMarker, status_code=status.HTTP_201_CREATED)
 def create_marker(marker : MarkerCreate, db: Session = Depends(get_db)):
     mark = create_new_marker(marker=marker, db=db)
     return mark

@@ -6,8 +6,8 @@ from db.models.markers import Marker
 
 class MarkerCreate(BaseModel):
     waypoint: str
-    lng : float
-    lat : float
+    lng: float
+    lat: float
 
 
 class ShowMarker(BaseModel):
