@@ -107,7 +107,11 @@
             add_marker_to_base(m);
         });
 
-        $(function() {
+
+        function update_marker() {
+            while(marker.length){
+                marker.pop();
+            }
             $.get({
                 url: '/api/waypoint/all',
                 dataType: "json",
@@ -121,10 +125,17 @@
                           m.icon = "crosshairs"
                           mark = add_marker_to_map(m);
                           mark.id = m.id;
+                          marker.push(mark);
                       });
                   });
-        });
+        };
 
+        // $(update_marker());
+
+        var intervalID = window.setInterval(
+            update_marker,
+            1000
+        );
     </script>
 
 {% endblock %}
