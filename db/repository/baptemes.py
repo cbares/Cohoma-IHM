@@ -35,3 +35,4 @@ def filter_baptemes(name: str, db: Session):
 def points_baptemes(db: Session):
     items = db.query(Bapteme).filter_by(type="point").all()
     return items
+

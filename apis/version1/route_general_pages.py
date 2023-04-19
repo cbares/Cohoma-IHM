@@ -8,7 +8,7 @@ from core.map_layers import get_map_layers
 templates = Jinja2Templates(directory="templates")
 general_pages_router = APIRouter()
 
-FRILEUSE = ((48.86102, 1.89201),  15)
+FRILEUSE = ((48.8645, 1.89201),  16)
 ENSEA = ((49.039, 2.072), 18)
 ORIGIN = FRILEUSE
 
