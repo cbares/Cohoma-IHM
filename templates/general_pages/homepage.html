@@ -15,6 +15,7 @@
         {{ script|safe }}
         var marker = [];
         var map = {{ mapname|safe }};
+        var ws = new WebSocket("ws://" + window.location.hostname + ":8000/ws/1");
 
         const RBBIcon = L.AwesomeMarkers.icon({
                 icon: 'truck-monster',
@@ -128,10 +129,15 @@
                           marker.push(mark);
                       });
                   });
+            ws.send("tick")
+
         };
 
         // $(update_marker());
 
+        ws.onmessage = function(event) {
+            console.log(event.data);
+        };
         var intervalID = window.setInterval(
             update_marker,
             1000

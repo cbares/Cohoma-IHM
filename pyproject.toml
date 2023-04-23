@@ -14,6 +14,7 @@ SQLAlchemy = "^2.0.7"
 aiofiles = "^23.1.0"
 xyzservices = "^2023.2.0"
 folium = "^0.14.0"
+websockets = "^11.0.2"
 
 
 [build-system]
