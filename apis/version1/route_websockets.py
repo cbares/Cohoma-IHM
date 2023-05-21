@@ -4,12 +4,10 @@ from fastapi import WebSocket, WebSocketDisconnect
 from core.websockets import ConnectionManager
 
 router = APIRouter()
-
-
 manager = ConnectionManager()
 
 
-@router.websocket("/ws/{client_id}")
+@router.websocket("/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
     await manager.connect(websocket)
     try:

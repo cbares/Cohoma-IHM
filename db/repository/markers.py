@@ -37,7 +37,10 @@ def list_markers(db:Session):
 
 
 def list_report_markers(db:Session):
-    items = db.query(Marker.id, Marker.name, Marker.latitude, Marker.longitude, Marker.timestamp, func.max(Marker.timestamp)).group_by(Marker.name)
+    items = db.query(Marker.id, Marker.name,
+                     Marker.latitude, Marker.longitude,
+                     Marker.timestamp, func.max(Marker.timestamp))\
+        .group_by(Marker.name)
     reports = []
     for i in items:
         rm = ReportMarker(i)
