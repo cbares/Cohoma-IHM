@@ -19,7 +19,6 @@ manager = ConnectionManager()
 async def create_satellite(satellite: SatelliteCreate, db: Session = Depends(get_db)):
     """Create a new satellite position"""
     new_position = create_new_satellite(satellite=satellite, db=db)
-    # TODO: send new satellite position by websocket
     await manager.broadcast(ShowSatellite(**new_position.__dict__).json())
     return new_position
 

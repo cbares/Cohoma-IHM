@@ -121,6 +121,9 @@
         function update_satellite(m){
             console.log(m.name);
             mark = satellites[m.name];
+            if (mark==undefined){
+                mark = add_satellite_to_map(m);
+            }
             lat = m.latitude + Math.random()*NOISE;
             lng = m.longitude + Math.random()*NOISE;
             console.log(lat, lng);
