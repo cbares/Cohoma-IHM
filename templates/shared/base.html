@@ -10,9 +10,13 @@
 	<script src="https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js"></script>
 </head>
 <body>
-    {% include "components/satellite.html" %}
+    <div style="display: grid;grid-template-columns: 2fr 1fr;grid-gap: 20px;">
+        {% include "components/satellite.html" %}
+        {% include "components/traps.html" %}
+    </div>
     {% block content %}
     {% endblock %}
+    {% include "components/popup.html" %}
 
     {% block scripts %}
     {% endblock %}

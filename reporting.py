@@ -17,7 +17,7 @@ DELTA = 1 # seconde
 
 SERVER= "127.0.0.1"
 PORT = "8000"
-URI = "api/waypoint/reporting"
+URI = "api/satellites/reporting"
 header = {'accept': 'application/json'}
 URL_IHM = f"http://{SERVER}:{PORT}/{URI}"
 

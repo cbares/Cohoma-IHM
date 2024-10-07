@@ -23,4 +23,18 @@
 - static: Fichiers statiques du site web
   - images
 - templates: page Html de templates (squelettes)
+
+# Base de données
+## baptemes: 
+contient les baptèmes terrain.
+
+data: 
+- nom: nom du baptème terrain
+- type: point, ligne ou zone
+- longitude
+- latitude
+
+plusieurs entrée de même nom définissent les points suivant () 
+
+API:
 - 

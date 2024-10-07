@@ -13,17 +13,13 @@
 {% block scripts %}
     <script>
         {{ script|safe }}
-        var marker = [];
-        var map = {{ mapname|safe }};
+        const NOISE = 0.00001;
+        marker = [];
+        satellites = {};
+        map = {{ mapname|safe }};
+        ws = new WebSocket("ws://" + window.location.hostname + ":8000/ws/1");
 
-        const RBBIcon = L.AwesomeMarkers.icon({
-                icon: 'truck-monster',
-                prefix: "fa",
-                markerColor: 'green'
-            });
-
-
-        function add_marker_to_map(marker_info){
+         function add_marker_to_map(marker_info){
             let location = L.latLng(marker_info.lat, marker_info.lng);
             let DAOIcon = L.AwesomeMarkers.icon({
                 icon: marker_info.icon,
@@ -91,12 +87,12 @@
         };
 
         map.on('click', function(e) {
-            var popLocation= e.latlng;
+            let popLocation= e.latlng;
             console.log(popLocation);
-            selected = $('input[name="SatelliteType"]:checked');
-            model = selected.val();
-            color = selected.data("color");
-            icon = selected.data("icon");
+            let selected = $('.trap input[name="TrapType"]:checked');
+            let model = selected.val();
+            let color = selected.data("color");
+            let icon = selected.data("icon");
             m = add_marker_to_map({
                 lat: popLocation.lat,
                 lng: popLocation.lng,
@@ -107,35 +103,68 @@
             add_marker_to_base(m);
         });
 
+        function add_satellite_to_map(m){
+            let location = L.latLng(m.latitude + Math.random()*NOISE, m.longitude + Math.random()*NOISE);
+            let DAOIcon = L.AwesomeMarkers.icon({
+                icon: m.icon,
+                prefix: "fa",
+                markerColor: m.color
+            });
+            let option = {};
+            option.draggable = false;
+            option.title = m.name;
+            option.icon = DAOIcon;
+            let mark = new L.marker(location, option);
+            return mark.addTo({{ mapname|safe }});
+        };
 
-        function update_marker() {
-            while(marker.length){
-                marker.pop();
+        function update_satellite(m){
+            console.log(m.name);
+            mark = satellites[m.name];
+            if (mark==undefined){
+                mark = add_satellite_to_map(m);
             }
+            lat = m.latitude + Math.random()*NOISE;
+            lng = m.longitude + Math.random()*NOISE;
+            console.log(lat, lng);
+            mark.setLatLng([lat, lng]);
+        };
+
+        function update_satellites() {
             $.get({
-                url: '/api/waypoint/all',
+                url: '/api/satellites/last',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8"
             }).done(function(json){
                       json.forEach(m => {
-                          m.lat = m.latitude;
-                          m.lng = m.longitude;
-                          m.name = m.waypoint;
-                          m.color = "gray";
-                          m.icon = "crosshairs"
-                          mark = add_marker_to_map(m);
-                          mark.id = m.id;
-                          marker.push(mark);
+                          if(m.name in satellites){
+                              update_satellite(m);
+                          } else {
+                              console.log("new sat")
+                              btn = $('.satellite input[value=' + m.name + ']')
+                              m.color = btn.data("color");
+                              m.icon = btn.data("icon")
+                              mark = add_satellite_to_map(m);
+                              satellites[m.name] = mark
+                          }
                       });
                   });
+            //ws.send("tick")
+
         };
 
-        // $(update_marker());
+        $(update_satellites());
 
+        ws.onmessage = function(event) {
+            console.log("WS message:" + event.data);
+            const msg = JSON.parse(event.data);
+            update_satellite(msg);
+        };
+        /*
         var intervalID = window.setInterval(
-            update_marker,
-            1000
-        );
+            update_satellites,
+            5000
+        ); */
     </script>
 
 {% endblock %}
