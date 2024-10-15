@@ -115,20 +115,21 @@
             option.title = m.name;
             option.icon = DAOIcon;
             let mark = new L.marker(location, option);
-            return mark.addTo({{ mapname|safe }});
-        };
+            mark.addTo({{ mapname|safe }});
+            return mark;
+        }
 
         function update_satellite(m){
             console.log(m.name);
             mark = satellites[m.name];
-            if (mark==undefined){
+            if (mark===undefined){
                 mark = add_satellite_to_map(m);
             }
             lat = m.latitude + Math.random()*NOISE;
             lng = m.longitude + Math.random()*NOISE;
             console.log(lat, lng);
             mark.setLatLng([lat, lng]);
-        };
+        }
 
         function update_satellites() {
             $.get({
@@ -140,18 +141,19 @@
                           if(m.name in satellites){
                               update_satellite(m);
                           } else {
-                              console.log("new sat")
+                              console.log("new sat:" + m.name)
                               btn = $('.satellite input[value=' + m.name + ']')
                               m.color = btn.data("color");
                               m.icon = btn.data("icon")
                               mark = add_satellite_to_map(m);
                               satellites[m.name] = mark
+                              console.log(mark)
                           }
                       });
                   });
             //ws.send("tick")
 
-        };
+        }
 
         $(update_satellites());
 
