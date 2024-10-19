@@ -6,15 +6,15 @@ authors = ["cbares <38895035+cbares@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "^0.95.0"
-pydantic = "^1.10.6"
-uvicorn = "^0.21.1"
-SQLAlchemy = "^2.0.7"
-aiofiles = "^23.1.0"
-xyzservices = "^2023.2.0"
-folium = "^0.14.0"
-websockets = "^11.0.2"
+python = "^3.12"
+fastapi = "*"
+pydantic = "*"
+uvicorn = "*"
+SQLAlchemy = "*"
+aiofiles = "*"
+xyzservices= "*"
+folium = "*"
+websockets = "*"
 
 
 [build-system]

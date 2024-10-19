@@ -13,11 +13,11 @@
 {% block scripts %}
     <script>
         {{ script|safe }}
-        const NOISE = 0.00001;
+        const NOISE = 0.00001; // avoid marker overlap
         marker = [];
         satellites = {};
         map = {{ mapname|safe }};
-        ws = new WebSocket("ws://" + window.location.hostname + ":8000/ws/1");
+        ws = new WebSocket(`ws://${window.location.hostname}:${window.location.port}/ws/1`);
 
          function add_marker_to_map(marker_info){
             let location = L.latLng(marker_info.lat, marker_info.lng);
@@ -45,7 +45,7 @@
             m.on('dblclick', function (e){
                var mark = m;
                $.ajax({
-                   url: '/api/waypoint/delete/' + mark.id,
+                   url: `/api/waypoint/delete/${mark.id}`,
                    method: 'DELETE',
                    contentType: "application/json; charset=utf-8"
                })
@@ -60,7 +60,7 @@
                 let item = {lat:location.lat, lng:location.lng};
                 mark.setLatLng(new L.LatLng(location.lat, location.lng),{draggable:'true'});
                 $.ajax({
-                    url: '/api/waypoint/update/' + mark.id,
+                    url: `/api/waypoint/update/${mark.id}`,
                     method: 'PATCH',
                     data: JSON.stringify(item),
                     dataType: "json",
@@ -70,7 +70,7 @@
                 return false;
             });
             return m;
-        };
+        }
 
         function add_marker_to_base(m){
             let location = m.getLatLng();
@@ -84,7 +84,7 @@
                     m.id = json.id;
                     console.log("id=" + m.id + " " + json.toString());
                 });
-        };
+        }
 
         map.on('click', function(e) {
             let popLocation= e.latlng;
@@ -93,7 +93,7 @@
             let model = selected.val();
             let color = selected.data("color");
             let icon = selected.data("icon");
-            m = add_marker_to_map({
+            let m = add_marker_to_map({
                 lat: popLocation.lat,
                 lng: popLocation.lng,
                 name: model,
@@ -121,12 +121,12 @@
 
         function update_satellite(m){
             console.log(m.name);
-            mark = satellites[m.name];
+            let mark = satellites[m.name];
             if (mark===undefined){
                 mark = add_satellite_to_map(m);
             }
-            lat = m.latitude + Math.random()*NOISE;
-            lng = m.longitude + Math.random()*NOISE;
+            let lat = m.latitude + Math.random()*NOISE;
+            let lng = m.longitude + Math.random()*NOISE;
             console.log(lat, lng);
             mark.setLatLng([lat, lng]);
         }
@@ -142,10 +142,10 @@
                               update_satellite(m);
                           } else {
                               console.log("new sat:" + m.name)
-                              btn = $('.satellite input[value=' + m.name + ']')
+                              let btn = $('.satellite input[value=' + m.name + ']')
                               m.color = btn.data("color");
                               m.icon = btn.data("icon")
-                              mark = add_satellite_to_map(m);
+                              let mark = add_satellite_to_map(m);
                               satellites[m.name] = mark
                               console.log(mark)
                           }
@@ -162,11 +162,11 @@
             const msg = JSON.parse(event.data);
             update_satellite(msg);
         };
-        /*
-        var intervalID = window.setInterval(
-            update_satellites,
-            5000
-        ); */
+
+        let intervalID = window.setInterval(
+            ws.send("tick"),
+            2000
+        );
     </script>
 
 {% endblock %}

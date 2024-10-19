@@ -15,13 +15,12 @@ class Settings:
         "2_TER_HERCULE": "2_TER_HERCULE",
         "1_TER_PETIT-POUCET": "1_TER_PETIT-POUCET",
         "2_TER_PETIT-POUCET": "2_TER_PETIT-POUCET",
-        #"SOU_TER_VAB": "SOU_TER_VAB",
+        # "SOU_TER_VAB": "SOU_TER_VAB",
     }
     SATELLITES: Set[str] = set(SATELLITES_ID.values())
     FRILEUSE: Tuple[Tuple, int] = ((48.8645, 1.89201), 16)
-    ENSEA: Tuple[Tuple, int]  = ((49.039, 2.072), 18)
-    HOME: Tuple[Tuple, int]  = ((49.18485, 2.412570), 20)
-    ORIGIN: Tuple[Tuple, int]  = FRILEUSE
-
+    ENSEA: Tuple[Tuple, int] = ((49.039, 2.072), 18)
+    HOME: Tuple[Tuple, int] = ((49.18485, 2.412570), 20)
+    ORIGIN: Tuple[Tuple, int] = FRILEUSE
 
 settings: Settings = Settings()

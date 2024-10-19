@@ -22,7 +22,7 @@ class ConnectionManager(metaclass=Singleton):
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+        await websocket.send_json({"message": message})
 
     async def broadcast(self, message: str):
         print(self.active_connections)

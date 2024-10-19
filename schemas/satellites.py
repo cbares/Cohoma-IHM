@@ -28,7 +28,7 @@ class ShowSatellite(BaseModel):
     battery: float | None
 
     class Config:  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True
 
 
 class Geolocation(BaseModel):
@@ -36,7 +36,7 @@ class Geolocation(BaseModel):
     latitude: float
 
     class Config:  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True
 
 
 class ReportSatellite(BaseModel):
@@ -55,4 +55,4 @@ class ReportSatellite(BaseModel):
             super().__init__(**kwargs)
 
     class Config:  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True

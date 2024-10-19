@@ -62,6 +62,10 @@ def _retrieve_last(db: Session):
     items = db.query(Satellite.id, Satellite.name, Satellite.latitude,
                      Satellite.longitude,
                      Satellite.timestamp,
+                     Satellite.altitude,
+                     Satellite.homing,
+                     Satellite.speed,
+                     Satellite.battery,
                      func.max(Satellite.timestamp)).group_by(Satellite.name)
     return items
 

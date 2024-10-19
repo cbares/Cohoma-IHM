@@ -11,6 +11,7 @@ tiles_contour = xyz.GeoportailFrance.Elevation_Contour_Line
 tiles = xyz.GeoportailFrance.Hr_Orthoimagery_Orthophotos
 #tiles = xyz.GeoportailFrance.Orthoimagery_Orthophotos_Bdortho
 
+
 def get_map_layers(start_coords, zoom):
     folium_map = folium.Map(
         tiles=None,
@@ -27,6 +28,7 @@ def get_map_layers(start_coords, zoom):
         tiles=tiles.build_url(),
         attr=tiles.html_attribution,
         useCache=True,
+        overlay=True,
         crossOrigin=True,
     ).add_to(folium_map)
 
@@ -55,6 +57,8 @@ def get_map_layers(start_coords, zoom):
         useCache=True,
         crossOrigin=True,
     ).add_to(folium_map)
+
+    folium.LayerControl().add_to(folium_map)
 
     fmtr = "function(num) {return L.Util.formatNum(num, 7) + ' º';};"
     MousePosition(position='topright', separator=' | Lat: ', prefix="Lng:",

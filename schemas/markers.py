@@ -18,7 +18,7 @@ class ShowMarker(BaseModel):
     timestamp: datetime
 
     class Config():  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True
 
 
 class Geolocation(BaseModel):
@@ -26,7 +26,7 @@ class Geolocation(BaseModel):
     latitude: float
 
     class Config():  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True
 
 
 class ReportMarker(BaseModel):
@@ -45,7 +45,7 @@ class ReportMarker(BaseModel):
             super().__init__(**kwargs)
 
     class Config():  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True
 
 
 class MarkerUpdate(BaseModel):
@@ -55,4 +55,4 @@ class MarkerUpdate(BaseModel):
     timestamp: datetime | None
 
     class Config():  # tells pydantic to convert even non dict obj to json
-        orm_mode = True
+        from_attributes = True

@@ -10,13 +10,13 @@ curl -X 'GET' \
 """
 team = "theseus"
 auth = "5fyg-mqqs-rxqu-sfjm-pl2d"
-ODAC = "https://6bus5bof45.execute-api.eu-west-3.amazonaws.com/dev/trackers"
-# ODAC = "http://127.0.0.1:8000/dev/trackers"
+# ODAC = "https://6bus5bof45.execute-api.eu-west-3.amazonaws.com/dev/trackers"
+ODAC = "http://127.0.0.1:8000/dev/trackers"
 
 DELTA = 1 # seconde
 
 SERVER= "127.0.0.1"
-PORT = "8000"
+PORT = "8008"
 URI = "api/satellites/reporting"
 header = {'accept': 'application/json'}
 URL_IHM = f"http://{SERVER}:{PORT}/{URI}"
@@ -44,7 +44,7 @@ def update_data_ODAC(s_src, s_dst):
             c = c + 1
         else:
             print(r.status_code, m)
-        #time.sleep(0.1)
+
     if c == len(marker):
         print(next(spinner), end='\b', flush=True)
     else:

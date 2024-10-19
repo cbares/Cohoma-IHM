@@ -1,5 +1,13 @@
 # Theseus IHM
 
+## Installation
+Utiliser Poetry pour gérer les dépendances:
+```bash
+poetry install
+```
+
+
+
 ## Schéma global:
 
 - Vue globale: ensemble de la carte
@@ -34,7 +42,28 @@ data:
 - longitude
 - latitude
 
-plusieurs entrée de même nom définissent les points suivant () 
+plusieurs entrées de même nom définissent les points suivant () 
 
-API:
-- 
+## Satellites:
+contient la position des satellites
+
+data:
+- nom: nom du satellite
+- longitude
+- latitude
+- altitude
+- vitesse
+- direction
+- niveau de batterie
+- timestamp
+
+Le timestamp est la date de la date mise à jour de la position du satellite,
+et permet de suivre le parcours du satellite dans le temps.
+
+## Marqueurs:
+contient les marqueurs de la carte, pour l'instant les pièges
+
+data:
+- nom: nom du piège
+- longitude
+- latitude
