@@ -15,6 +15,7 @@ ORIGIN = settings.ORIGIN
 
 @general_pages_router.get("/")
 async def home(request: Request):
+
     leafmap = get_map_layers(*ORIGIN)
     context = { "request": request }
     context.update(leafmap)
@@ -23,4 +24,5 @@ async def home(request: Request):
 
 @general_pages_router.get('/favicon.ico', response_class=RedirectResponse, status_code=302)
 def favicon():
+
     return 'static/favicon.ico'

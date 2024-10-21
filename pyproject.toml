@@ -4,18 +4,21 @@ version = "0.1.0"
 description = "IHM pour CoHoMa II - 2023"
 authors = ["cbares <38895035+cbares@users.noreply.github.com>"]
 readme = "README.md"
+package-mode = false
+
+[tool.poetry.scripts]
+start = "main:start"
 
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "*"
 pydantic = "*"
-uvicorn = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 SQLAlchemy = "*"
 aiofiles = "*"
 xyzservices= "*"
 folium = "*"
 websockets = "*"
-
 
 [build-system]
 requires = ["poetry-core"]

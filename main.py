@@ -1,6 +1,7 @@
 import csv
 import os.path
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -58,6 +59,11 @@ def start_application():
         load_terrain()
         add_satellites()
     return app
+
+
+def start():
+    """launch with `poetry run start` at root level"""
+    uvicorn.run("main:fast_app", host="0.0.0.0", port=8008, reload=True)
 
 
 fast_app = start_application()
