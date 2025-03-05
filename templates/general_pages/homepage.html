@@ -157,6 +157,31 @@
 
         $(update_satellites());
 
+        function draw_satellite_path(name){
+            $.get({
+                url: '/api/satellites/path/'+name,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8"
+            }).done(function(json){
+                let point_list=[];
+                json.forEach(m => {
+                    let location = L.latLng(m.latitude, m.longitude);
+                    point_list.push(location);
+                });
+                let polyline = L.polyline(point_list, {color: 'red'});
+                polyline.addTo( {{ mapname|safe }} );
+            });
+        }
+
+        draw_satellite_path("3_AIR_DLR");
+        /*
+        "1_AIR_DAO",
+        "2_AIR_DAO",
+        "3_AIR_DLR",
+        "2_TER_PETIT-POUCET"
+        ]*/
+
+
         ws.onmessage = function(event) {
             console.log("WS message:" + event.data);
             const msg = JSON.parse(event.data);
